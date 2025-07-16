@@ -1,54 +1,54 @@
-"use client";
+'use client';
 
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
 
-const mockSurveys = [
-  {
-    id: "1",
-    title: "Patient Satisfaction Survey",
-    description: "Measures patient satisfaction with the care received.",
-  },
-  {
-    id: "2",
-    title: "Post-Operative Follow-Up",
-    description: "Tracks recovery progress and complications after surgery.",
-  },
-  {
-    id: "3",
-    title: "Mental Health Check-in",
-    description: "A brief screening for common mental health conditions.",
-  },
-  {
-    id: "4",
-    title: "Annual Wellness Assessment",
-    description: "A comprehensive health review for preventive care.",
-  },
-];
+const survey = {
+  id: 1,
+  name: 'Psoriasis Care Survey',
+  patients: 28,
+  dateCreated: '2023-10-10',
+  type: 'MSL',
+  active: 22,
+  completed: 5,
+  invited: 1,
+  skipped: 0
+};
 
-export default function SurveysPage() {
+export default function SurveyListPage() {
+  const router = useRouter();
+
   return (
-    <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Available Surveys</h1>
-        <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
-          Select a survey to view patient data and insights.
-        </p>
-      </header>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {mockSurveys.map((survey) => (
-          <Link href={`/dashboard/surveys/${survey.id}/patients`} key={survey.id} legacyBehavior passHref>
-            <a className="block h-full">
-              <Card className="h-full transition-all hover:shadow-lg hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                <CardHeader>
-                  <CardTitle>{survey.title}</CardTitle>
-                  <CardDescription className="pt-2">{survey.description}</CardDescription>
-                </CardHeader>
-              </Card>
-            </a>
-          </Link>
-        ))}
-      </div>
+    <div className="max-w-2xl mx-auto py-10">
+      <h1 className="text-3xl font-bold mb-6">Surveys</h1>
+      <Card className="hover:shadow-lg cursor-pointer transition"
+        onClick={() => router.push(`/dashboard/surveys/${survey.id}/patients`)}>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-3">
+            {survey.name}
+            <Badge variant="outline">{survey.type}</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-4 justify-between items-center">
+            <div>
+              <div className="text-sm text-gray-500">Created</div>
+              <div>{survey.dateCreated}</div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-500">Patients</div>
+              <div>{survey.patients}</div>
+            </div>
+            <div className="flex gap-2">
+              <Badge variant="secondary">Active: {survey.active}</Badge>
+              <Badge variant="success">Completed: {survey.completed}</Badge>
+              <Badge variant="default">Invited: {survey.invited}</Badge>
+              <Badge variant="destructive">Skipped: {survey.skipped}</Badge>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
